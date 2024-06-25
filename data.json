@@ -1,0 +1,55 @@
+{
+  "year": "2024",
+  "months": [
+    {
+      "name": "January",
+      "days": [
+        {
+          "date": "01/01/24",
+          "assignments": [
+            {
+              "name": "test one",
+              "description": "basics of biology",
+              "due": "01/01/24 10:00:00"
+            },
+            {
+              "name": "my meeting",
+              "description": "daily stand up",
+              "due": "01/01/24 08:00:00"
+            }
+          ]
+        },
+        {
+          "date": "01/02/24",
+          "assignments": [
+            {
+              "name": "homework 3",
+              "description": "working on code",
+              "due": "01/02/24 11:00:00"
+            },
+            {
+              "name": "my meeting",
+              "description": "daily stand up",
+              "due": "01/02/24 14:00:00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "February",
+      "days": [
+        {
+          "date": "02/01/24",
+          "assignments": [
+            {
+              "name": "my feb meeting",
+              "description": "blah blah",
+              "due": "02/01/24 09:00:00"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

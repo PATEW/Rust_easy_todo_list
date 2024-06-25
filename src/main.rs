@@ -1,8 +1,8 @@
-mod assignments;
+mod calendar;
+
+use calendar::Calendar;
 use std::{fs::File, io::{BufWriter, Write}, vec};
 use serde_derive::Serialize;
-
-use assignments::Assignment;
 
 #[derive(Debug)]
 enum AppState {
@@ -15,23 +15,6 @@ enum AppState {
     SaveandQuit,
 }
 
-#[derive(Serialize)]
-struct CalDay {
-    date: String,
-    assignments: Vec<Assignment>,
-}
-
-#[derive(Serialize)]
-struct CalMonth {
-    name: String,
-    days: Vec<CalDay>,
-}
-
-#[derive(Serialize)]
-struct Calendar {
-    year: String,
-    months: Vec<CalMonth>,
-}
 
 fn main() {
     let mut current_state: AppState = AppState::StartUp;
@@ -40,8 +23,20 @@ fn main() {
 
     // if calendar exists, use it
     // else create new one:
-    create_default_calendar();
+    let calendar: Calendar = calendar::create_default_calendar();
 
+    let json_str = match serde_json::to_string(&calendar) {
+        Ok(v) => v,
+        Err(_) => {
+            eprintln!("Unable to load data");
+            panic!("JSON brokey or something");
+        }
+    };
+
+    println!("loaded calendar: {}", json_str);
+    let print_result: std::io::Result<()> = write_to_json(json_str);
+
+    //////////////////////////////////////////
 
     current_state = AppState::MainMenu;
 
@@ -74,36 +69,6 @@ pub fn create_item() {
     // let assignment1 = Assignment::new(String::from("my homework"), 1);
     // let (ass_name, ass_num) = assignment1.get_info();
     // println!("assignment {} created: {}", ass_num, ass_name);
-}
-
-pub fn create_default_calendar() {
-    // this is just gross looking for testing, will be much smaller after other features work
-    let assignment1: Assignment = Assignment::new(String::from("test one"), String::from("basics of biology"), String::from("01/01/24 10:00:00"));
-    let assignment2: Assignment = Assignment::new(String::from("my meeting"), String::from("daily stand up"), String::from("01/01/24 08:00:00"));
-    let assignment3: Assignment = Assignment::new(String::from("homework 3"), String::from("working on code"), String::from("01/02/24 11:00:00"));
-    let assignment4: Assignment = Assignment::new(String::from("my meeting"), String::from("daily stand up"), String::from("01/02/24 14:00:00"));
-    let assignment5: Assignment = Assignment::new(String::from("my feb meeting"), String::from("blah blah"), String::from("02/01/24 09:00:00"));
-    let day_one: CalDay = CalDay {date: "01/01/24".to_string(), assignments: vec![assignment1, assignment2]};
-    let day_two: CalDay = CalDay {date: "01/02/24".to_string(), assignments: vec![assignment3, assignment4]};
-    let day_three: CalDay = CalDay {date: "02/01/24".to_string(), assignments: vec![assignment5]};
-    let month_one: CalMonth = CalMonth {name: "January".to_string(), days: vec![day_one, day_two]};
-    let month_two: CalMonth = CalMonth {name: "February".to_string(), days: vec![day_three]};
-
-    let calendar: Calendar = Calendar {
-        year: "2024".to_string(),
-        months: vec![month_one, month_two],
-    };
-
-    let json_str = match serde_json::to_string(&calendar) {
-        Ok(v) => v,
-        Err(_) => {
-            eprintln!("Unable to load data");
-            panic!("JSON brokey or something");
-        }
-    };
-
-    println!("loaded calendar: {}", json_str);
-    let print_result: std::io::Result<()> = write_to_json(json_str);
 }
 
 fn write_to_json(json_str: String) -> std::io::Result<()> {

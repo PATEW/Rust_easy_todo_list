@@ -1,16 +1,20 @@
+use serde_derive::Serialize;
+
+#[derive(Serialize)]
 pub struct Assignment {
     name: String,
-    num: i32,
+    description: String,
+    due: String,
 }
 
 impl Assignment {
 
-    pub fn new(name: String, num: i32) -> Self {
-        Assignment { name, num }
+    pub fn new(name: String, description: String, due: String) -> Self {
+        Assignment { name, description, due }
     }
 
-    pub fn get_info(&self) -> (&str, i32) {
-        (&self.name, self.num)
+    pub fn get_info(&self) -> (&str, &str, &str) {
+        (&self.name, &self.description, &self.due)
     }
 }
 

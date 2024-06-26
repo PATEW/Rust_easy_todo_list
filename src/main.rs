@@ -1,4 +1,7 @@
 mod calendar;
+mod month;
+mod day;
+mod assignments;
 
 use calendar::Calendar;
 use std::{fs::File, io::{BufWriter, Write}, vec};
@@ -23,7 +26,7 @@ fn main() {
 
     // if calendar exists, use it
     // else create new one:
-    let calendar: Calendar = calendar::create_default_calendar();
+    let calendar: Calendar = Calendar::create_default_calendar();
 
     let json_str = match serde_json::to_string(&calendar) {
         Ok(v) => v,

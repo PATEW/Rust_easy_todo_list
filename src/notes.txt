@@ -1,0 +1,16 @@
+use time::{OffsetDateTime, PrimitiveDateTime, Duration};
+
+fn main() {
+    use std::time::SystemTime;
+
+    let timestamp = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
+    
+    let created_at = OffsetDateTime::from_unix_timestamp_nanos(
+        (timestamp.as_secs() as i128 * 1_000_000_000) + (timestamp.subsec_nanos() as i128)
+    ).unwrap();
+    
+    let created_at_edt = created_at - Duration::hours(5);
+    
+    let created_at = PrimitiveDateTime::new(created_at_edt.date(), created_at_edt.time());
+    println!("{:?}", created_at);
+}

@@ -1,6 +1,4 @@
-mod day;
-
-use day::CalDay;
+use crate::day::CalDay;
 use serde_derive::Serialize;
 
 #[derive(Serialize)]

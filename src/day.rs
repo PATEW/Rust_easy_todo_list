@@ -1,6 +1,4 @@
-mod assignments;
-
-use assignments::Assignment;
+use crate::assignments::Assignment;
 use serde_derive::Serialize;
 
 #[derive(Serialize)]

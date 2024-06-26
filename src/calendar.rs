@@ -1,10 +1,6 @@
-mod month;
-mod day;
-mod assignments;
-
-use month::CalMonth;
-use day::CalDay;
-use assignments::Assignment;
+use crate::month::CalMonth;
+use crate::day::CalDay;
+use crate::assignments::Assignment;
 
 use serde_derive::Serialize;
 

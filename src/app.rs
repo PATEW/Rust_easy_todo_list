@@ -9,7 +9,6 @@ pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
 /// Application.
 #[derive(Debug)]
-
 enum AppState {
     StartUp,
     MainMenu,
@@ -25,6 +24,10 @@ pub struct App {
     pub running: bool,
     /// counter
     pub counter: u8,
+    /// focused chunk (0 for top, 1 for bottom)
+    pub focused_chunk: usize,
+    /// selected cell in the table
+    pub table_selected_cell: (usize, usize),
 }
 
 impl Default for App {
@@ -32,6 +35,8 @@ impl Default for App {
         Self {
             running: true,
             counter: 0,
+            focused_chunk: 0,
+            table_selected_cell: (0, 0),
         }
     }
 }

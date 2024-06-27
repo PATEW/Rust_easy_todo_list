@@ -5,13 +5,13 @@ use time::PrimitiveDateTime;
 pub struct Assignment {
     name: String,
     description: String,
-    start: (String, String),
-    end: (String, String),
+    start: PrimitiveDateTime,
+    end: PrimitiveDateTime,
 }
 
 impl Assignment {
 
-    pub fn new(name: String, description: String, start: (String, String), end: (String, String)) -> Self {
+    pub fn new(name: String, description: String, start: PrimitiveDateTime, end: PrimitiveDateTime) -> Self {
         Assignment { name, description, start, end }
     }
 

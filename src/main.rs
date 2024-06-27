@@ -68,10 +68,10 @@ fn main() {
 }
 
 pub fn create_item() {
-    println!("create item here");
-    // let assignment1 = Assignment::new(String::from("my homework"), 1);
-    // let (ass_name, ass_num) = assignment1.get_info();
-    // println!("assignment {} created: {}", ass_num, ass_name);
+    println!("\nPlease enter the event name: ");
+    println!("\nPlease enter the event description:\n")
+    println!("\nWhen does the event start? Please enter it in the format 'YYYY-MM-DD HH:MM'\n");
+    println!("\nWhen does the event end? Please enter it in the format 'YYYY-MM-DD HH:MM'\n");
 }
 
 fn write_to_json(json_str: String) -> std::io::Result<()> {

@@ -6,6 +6,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
     match key_event.code {
         // Exit application on `q`
         KeyCode::Char('q') => {
+            App::save_new_data(app.save_data);
             app.quit();
         }
         // Switch focus between chunks on Tab

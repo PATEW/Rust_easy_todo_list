@@ -4,6 +4,7 @@ use crate::assignments::Assignment;
 
 use time::macros::datetime;
 use serde_derive::Serialize;
+use time::PrimitiveDateTime;
 
 #[derive(Serialize)]
 pub struct Calendar {
@@ -33,4 +34,8 @@ impl Calendar {
     
         calendar
     }
+
+    // pub fn add_assignment(details: (String, String, PrimitiveDateTime, PrimitiveDateTime)) -> Assignment {
+    //     let assignment =  Assignment::new(String, String, datetime!(2024-01-01 10:00:00), datetime!(2024-01-01 11:00:00));
+    // }
 }

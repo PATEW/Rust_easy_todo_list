@@ -1,12 +1,12 @@
-use crate::app::{App, AppResult};
-use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
+use crate::{app::{App, AppResult}, file_reader_writer::DataIO};
+use crossterm::event::{KeyCode, KeyEvent};
 
 /// Handles the key events and updates the state of [`App`].
 pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
     match key_event.code {
         // Exit application on `q`
         KeyCode::Char('q') => {
-            App::save_new_data(app.save_data);
+            app.save_data();
             app.quit();
         }
         // Switch focus between chunks on Tab

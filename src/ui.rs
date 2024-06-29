@@ -5,7 +5,7 @@ use ratatui::{
     Frame,
 };
 
-use crate::app::App;
+use crate::{app::App, calendar};
 
 /// Renders the user interface widgets.
 pub fn render(app: &mut App, frame: &mut Frame) {
@@ -22,6 +22,11 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         .constraints([Constraint::Percentage(40), Constraint::Percentage(60)].as_ref())
         .split(chunks[0]);
 
+    let middle_chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([Constraint::Percentage(20), Constraint::Percentage(80)].as_ref())
+        .split(chunks[1]);
+
     // Define a layout with two horizontal chunks within the third vertical chunk
     let bottom_chunks = Layout::default()
         .direction(Direction::Horizontal)
@@ -29,7 +34,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         .split(chunks[2]);
 
     // First Paragraph
-    let paragraph1 = Paragraph::new(format!(
+    let information_paragraph = Paragraph::new(format!(
         "Press left and right to change the counter.\n\
             Counter: {}",
         app.counter
@@ -72,7 +77,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     .style(Style::default().fg(Color::Cyan).bg(Color::Black));
 
     // Calculate the row height to fit within the available space
-    let total_available_height = chunks[1].height;
+    let total_available_height = middle_chunks[1].height;
     let row_height = total_available_height / 5; // 5 rows
 
     // Second Table
@@ -96,7 +101,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         .height(row_height as u16)
     }).collect::<Vec<_>>();
 
-    let table = Table::new(rows, [Constraint::Length(5), Constraint::Length(5)])
+    let calendar_table = Table::new(rows, [Constraint::Length(5), Constraint::Length(5)])
         .block(
             Block::default()
                 .borders(Borders::ALL)
@@ -154,11 +159,11 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         .alignment(Alignment::Left);
 
     // Render the paragraphs in the first chunk, split horizontally
-    frame.render_widget(paragraph1, top_chunks[0]);
+    frame.render_widget(information_paragraph, top_chunks[0]);
     frame.render_widget(kanban_table, top_chunks[1]);
 
-    // Render the table in the second chunk
-    frame.render_widget(table, chunks[1]);
+    // Render the calendar_table in the second chunk
+    frame.render_widget(calendar_table, chunks[1]);
 
     // Render the controls and additional info in the third chunk, split horizontally
     frame.render_widget(controls, bottom_chunks[0]);

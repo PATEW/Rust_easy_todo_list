@@ -7,6 +7,7 @@ pub struct Assignment {
     description: String,
     start: PrimitiveDateTime,
     end: PrimitiveDateTime,
+    // Kanban_status: status enum?
 }
 
 impl Assignment {

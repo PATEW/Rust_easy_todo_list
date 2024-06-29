@@ -4,12 +4,11 @@ use crate::assignments::Assignment;
 
 use time::macros::datetime;
 use serde_derive::Serialize;
-use time::PrimitiveDateTime;
 
 #[derive(Serialize)]
 pub struct Calendar {
-    year: String,
-    months: Vec<CalMonth>,
+    pub year: String,
+    pub months: Vec<CalMonth>,
 }
 
 impl Calendar {

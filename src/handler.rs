@@ -37,7 +37,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
         }
         KeyCode::Char('j') => {
             if app.focused_chunk == 1 {
-                app.table_selected_cell.0 = (app.table_selected_cell.0 + 1).min(4);
+                app.table_selected_cell.0 = (app.table_selected_cell.0 + 1).min(5);
             }
         }
         KeyCode::Char('k') => {

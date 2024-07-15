@@ -17,10 +17,6 @@ impl Assignment {
     }
 
 
-
-    // pub fn get_info(&self) -> (&str, &str, &str) {
-    //     (&self.name, &self.description, &self.due)
-    // }
 }
 
 // pub fn list_all_assignments() {

@@ -16,7 +16,4 @@ pub mod handler;
 // mine
 mod file_reader_writer;
 mod calendar;
-mod month;
-mod day;
 mod assignments;
-mod user_data;

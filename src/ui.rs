@@ -5,7 +5,7 @@ use ratatui::{
     Frame,
 };
 
-use crate::{app::App, calendar};
+use crate::app::App;
 
 /// Renders the user interface widgets.
 pub fn render(app: &mut App, frame: &mut Frame) {
@@ -81,22 +81,33 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     let row_height = total_available_height / 5; // 5 rows
 
     // Second Table
-    let mut cell_counter = 1;
-    let rows = (0..5).map(|i| {
+    let (today_day, today_month, _today_year) = &app.todays_day_month_year;
+    let today_day: u32 = today_day.parse().unwrap_or(0);
+
+    let rows = (0..6).map(|i| {
         Row::new((0..7).map(|j| {
-            let content = format!("{}", cell_counter);
-            let cell = if (i, j) == app.table_selected_cell {
-                Cell::from(format!("[{}]", content)).style(
-                    Style::default()
-                        .fg(Color::Black)
-                        .bg(Color::Yellow)
-                        .add_modifier(Modifier::BOLD),
-                )
+            let index = i * 7 + j;
+            if let Some(&(day, is_current_month)) = app.list_of_days_in_selected_month.get(index) {
+                let content = format!("{:>2}", day);  // Right-align with width 2
+                let cell = if (i, j) == app.table_selected_cell {
+                    Cell::from(format!("[{}]", content)).style(
+                        Style::default()
+                            .fg(Color::Black)
+                            .bg(Color::Yellow)
+                            .add_modifier(Modifier::BOLD),
+                    )
+                } else if day == today_day && is_current_month {
+                    // Check if it's today's date
+                    Cell::from(content).style(Style::default().fg(Color::Red).add_modifier(Modifier::BOLD))
+                } else if is_current_month {
+                    Cell::from(content).style(Style::default().fg(Color::Green))
+                } else {
+                    Cell::from(content).style(Style::default().fg(Color::Gray))
+                };
+                cell
             } else {
-                Cell::from(content).style(Style::default().fg(Color::Green).bg(Color::Black))
-            };
-            cell_counter += 1;
-            cell
+                Cell::from("  ").style(Style::default().fg(Color::Gray))
+            }
         }).collect::<Vec<_>>())
         .height(row_height as u16)
     }).collect::<Vec<_>>();

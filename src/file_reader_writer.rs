@@ -1,5 +1,5 @@
 
-use std::{fs::{self, File}, io::{BufWriter, Write}, path::Path};
+use std::{fs::{self, File}, io::BufWriter, path::Path};
 
 use crate::{app::App, calendar::Calendar};
 
@@ -16,7 +16,7 @@ impl DataIO for App {
     }
     
     fn save_data(&self) {
-        match write_to_json(&self.user_data.user_calendar) {
+        match write_to_json(&self.user_calendar) {
             Ok(_) => println!("Data saved successfully"),
             Err(e) => println!("COULD NOT SAVE DATA!!!\n{}", e),
         }

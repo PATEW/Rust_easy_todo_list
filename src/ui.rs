@@ -147,7 +147,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     .style(Style::default().fg(Color::Cyan).bg(Color::Black))
     .alignment(Alignment::Left);
 
-    let additional_info = Paragraph::new("SE530 Requirements Document\nCEC470 Compiler Design")
+    let additional_info = Paragraph::new("XYZ Requirements Document\nIntegration Testing\nAI/ML homework #2\nApp UI Overhaul")
         .block(
             Block::default()
                 .borders(Borders::ALL)

@@ -1,89 +1,36 @@
-mod calendar;
-mod month;
-mod day;
-mod assignments;
+use rust_easy_todo_list::app::{App, AppResult};
+use rust_easy_todo_list::event::{Event, EventHandler};
+use rust_easy_todo_list::handler::handle_key_events;
+use rust_easy_todo_list::tui::Tui;
+use std::io;
+use ratatui::backend::CrosstermBackend;
+use ratatui::Terminal;
 
-use calendar::Calendar;
-use std::{fs::File, io::{BufWriter, Write}, vec};
-use serde_derive::Serialize;
+fn main() -> AppResult<()> {
+    // Create an application.
+    let mut app = App::new();
 
-#[derive(Debug)]
-enum AppState {
-    StartUp,
-    MainMenu,
-    CalendarView,
-    CreateItem,
-    ModifyItem,
-    DeleteItem,
-    SaveandQuit,
-}
+    // Initialize the terminal user interface.
+    let backend = CrosstermBackend::new(io::stderr());
+    let terminal = Terminal::new(backend)?;
+    let events = EventHandler::new(250);
+    let mut tui = Tui::new(terminal, events);
+    tui.init()?;
 
-
-fn main() {
-    let mut current_state: AppState = AppState::StartUp;
-
-    // Populate the calendar with previous info, if there is any
-
-    // if calendar exists, use it
-    // else create new one:
-    let calendar: Calendar = Calendar::create_default_calendar();
-
-    let json_str = match serde_json::to_string(&calendar) {
-        Ok(v) => v,
-        Err(_) => {
-            eprintln!("Unable to load data");
-            panic!("JSON brokey or something");
-        }
-    };
-
-    println!("loaded calendar: {}", json_str);
-    let print_result: std::io::Result<()> = write_to_json(json_str);
-
-    //////////////////////////////////////////
-
-    current_state = AppState::MainMenu;
-
-    println!("\n_________________\nTo-Do list app\n_________________\npick an option:\n");
-    println!("1. Calendar View\n2. Create Item\n3. Modify Item\n4. Delete Item\n5. Save and Quit\n");
-
-    let mut valid_option: bool = false; 
-    while !valid_option {
-        let response: i32 = read_int();
-        if response >= 1 && response <=5 {
-
-            valid_option = true;
-
-            match response {
-                1 => current_state = AppState::CalendarView,
-                2 => {current_state = AppState::CreateItem; create_item()},
-                3 => current_state = AppState::ModifyItem,
-                4 => current_state = AppState::DeleteItem,
-                5 => current_state = AppState::SaveandQuit,
-                _ => panic!("option selection should not be possible"),
-            }
-
-            println!("\nyou picked option {} which is {:?}\n", response, current_state);
+    // Start the main loop.
+    while app.running {
+        // Render the user interface.
+        tui.draw(&mut app)?;
+        // Handle events.
+        match tui.events.next()? {
+            Event::Tick => app.tick(),
+            Event::Key(key_event) => handle_key_events(key_event, &mut app)?,
+            Event::Mouse(_) => {}
+            Event::Resize(_, _) => {}
         }
     }
-}
 
-pub fn create_item() {
-    println!("\nPlease enter the event name: ");
-    println!("\nPlease enter the event description:\n")
-    println!("\nWhen does the event start? Please enter it in the format 'YYYY-MM-DD HH:MM'\n");
-    println!("\nWhen does the event end? Please enter it in the format 'YYYY-MM-DD HH:MM'\n");
-}
-
-fn write_to_json(json_str: String) -> std::io::Result<()> {
-    let file = File::create("data.json")?;
-    let mut writer = BufWriter::new(file);
-    serde_json::to_writer(&mut writer, &json_str)?;
-    writer.flush()?;
+    // Exit the user interface.
+    tui.exit()?;
     Ok(())
-}
-
-fn read_int() -> i32 {
-    let mut line = String::new();
-    std::io::stdin().read_line(&mut line).unwrap();
-    line.trim_end().parse().unwrap()
 }

@@ -1,0 +1,104 @@
+{
+  "assignments": [
+    {
+      "name": "test one",
+      "description": "basics of biology",
+      "start": [
+        2024,
+        1,
+        10,
+        0,
+        0,
+        0
+      ],
+      "end": [
+        2024,
+        1,
+        11,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "my meeting",
+      "description": "daily stand up",
+      "start": [
+        2024,
+        1,
+        12,
+        0,
+        0,
+        0
+      ],
+      "end": [
+        2024,
+        1,
+        13,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "homework 3",
+      "description": "working on code",
+      "start": [
+        2024,
+        2,
+        8,
+        0,
+        0,
+        0
+      ],
+      "end": [
+        2024,
+        1,
+        9,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "my meeting",
+      "description": "daily stand up",
+      "start": [
+        2024,
+        2,
+        9,
+        0,
+        0,
+        0
+      ],
+      "end": [
+        2024,
+        1,
+        13,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "my feb meeting",
+      "description": "blah blah",
+      "start": [
+        2024,
+        1,
+        12,
+        0,
+        0,
+        0
+      ],
+      "end": [
+        2024,
+        1,
+        15,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

@@ -3,9 +3,9 @@ use crate::day::CalDay;
 use crate::assignments::Assignment;
 
 use time::macros::datetime;
-use serde_derive::Serialize;
+use serde_derive::{Deserialize, Serialize};
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Calendar {
     pub year: String,
     pub months: Vec<CalMonth>,

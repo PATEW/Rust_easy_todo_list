@@ -1,5 +1,7 @@
 use std::error;
 
+use chrono::{Local, Datelike};
+
 use crate::calendar::Calendar;
 use crate::file_reader_writer::{self, DataIO};
 use crate::user_data::UserData;
@@ -20,10 +22,20 @@ pub struct App {
     pub table_selected_cell: (usize, usize),
 
     pub user_data: UserData, // data to be changed during app use
+
+    pub todays_date: (u16, u8, u8),
 }
 
 impl App {
-    fn initialize(loaded_data: Calendar) -> Self {
+    /// Constructs a new instance of [`App`].
+    pub fn new() -> Self {
+        let loaded_data: Calendar = App::load_data();
+        let todays_date: (u16, u8, u8) = App::get_todays_year_month_day();
+        Self::initialize(loaded_data, todays_date)
+    }
+
+    // set fields
+    fn initialize(loaded_data: Calendar, todays_date: (u16, u8, u8)) -> Self {
         let new_data: UserData = UserData::new(loaded_data);
         Self {
             running: true,
@@ -31,15 +43,8 @@ impl App {
             focused_chunk: 0,
             table_selected_cell: (0, 0),
             user_data: new_data,
+            todays_date: todays_date,
         }
-    }
-}
-
-impl App {
-    /// Constructs a new instance of [`App`].
-    pub fn new() -> Self {
-        let loaded_data: Calendar = App::load_data();
-        Self::initialize(loaded_data)
     }
 
     /// Handles the tick event of the terminal.
@@ -60,5 +65,10 @@ impl App {
         if let Some(res) = self.counter.checked_sub(1) {
             self.counter = res;
         }
+    }
+
+    pub fn get_todays_year_month_day() -> (u16, u8, u8) {
+        let today = Local::now().date_naive();
+        (today.year() as u16, today.month() as u8, today.day() as u8)
     }
 }

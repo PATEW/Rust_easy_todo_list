@@ -7,8 +7,8 @@ pub struct UserData {
 }
 
 impl UserData {
-    pub fn new(previous_calendar_data: Calendar) -> Self {
-        UserData {user_calendar: previous_calendar_data}
+    pub fn new(previous_saved_calendar_data: Calendar) -> Self {
+        UserData {user_calendar: previous_saved_calendar_data}
     }
 
 }

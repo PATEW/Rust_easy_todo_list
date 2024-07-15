@@ -1,7 +1,7 @@
-use serde_derive::Serialize;
+use serde_derive::{Deserialize, Serialize};
 use time::PrimitiveDateTime;
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Assignment {
     name: String,
     description: String,

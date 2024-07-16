@@ -1,5 +1,6 @@
-use crate::{app::{App, AppResult}, file_reader_writer::DataIO};
+use crate::{app::{App, AppResult, CalendarView}, file_reader_writer::DataIO};
 use crossterm::event::{KeyCode, KeyEvent};
+use chrono::{NaiveDate, Datelike};
 
 /// Handles the key events and updates the state of [`App`].
 pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
@@ -43,6 +44,26 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
         KeyCode::Char('k') => {
             if app.focused_chunk == 1 {
                 app.table_selected_cell.0 = app.table_selected_cell.0.saturating_sub(1);
+            }
+        }
+        KeyCode::Char('o') => {
+            if app.focused_chunk == 1 {
+                app.navigate_previous();
+            }
+        }
+        KeyCode::Char('p') => {
+            if app.focused_chunk == 1 {
+                app.navigate_next();
+            }
+        }
+        KeyCode::Char('f') => {
+            if app.focused_chunk == 1 {
+                app.zoom_in();
+            }
+        }
+        KeyCode::Char('d') => {
+            if app.focused_chunk == 1 {
+                app.zoom_out();
             }
         }
         _ => {}

@@ -5,7 +5,7 @@ use ratatui::{
     Frame,
 };
 
-use crate::app::App;
+use crate::app::{App, CalendarView};
 
 /// Renders the user interface widgets.
 pub fn render(app: &mut App, frame: &mut Frame) {
@@ -60,7 +60,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         Row::new(vec![Cell::from(""), Cell::from(""), Cell::from(""), Cell::from("")]),
         Row::new(vec![Cell::from(""), Cell::from(""), Cell::from(""), Cell::from("")]),
         Row::new(vec![Cell::from(""), Cell::from(""), Cell::from(""), Cell::from("")])
-    ], [Constraint::Length(5), Constraint::Length(5)])
+    ], [ Constraint::Length(5), Constraint::Length(5)])
     .block(
         Block::default()
             .borders(Borders::ALL)
@@ -80,43 +80,73 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     let total_available_height = middle_chunks[1].height;
     let row_height = total_available_height / 5; // 5 rows
 
-    // Second Table
-    let (today_day, today_month, _today_year) = &app.todays_day_month_year;
+    // Calendar Table
+    let (today_day, today_month, today_year) = &app.todays_day_month_year;
     let today_day: u32 = today_day.parse().unwrap_or(0);
 
-    let rows = (0..6).map(|i| {
-        Row::new((0..7).map(|j| {
-            let index = i * 7 + j;
-            if let Some(&(day, is_current_month)) = app.list_of_days_in_selected_month.get(index) {
-                let content = format!("{:>2}", day);  // Right-align with width 2
-                let cell = if (i, j) == app.table_selected_cell {
-                    Cell::from(format!("[{}]", content)).style(
-                        Style::default()
-                            .fg(Color::Black)
-                            .bg(Color::Yellow)
-                            .add_modifier(Modifier::BOLD),
-                    )
-                } else if day == today_day && is_current_month {
-                    // Check if it's today's date
-                    Cell::from(content).style(Style::default().fg(Color::Red).add_modifier(Modifier::BOLD))
-                } else if is_current_month {
-                    Cell::from(content).style(Style::default().fg(Color::Green))
+    let view_data = app.get_current_view_data();
+    let rows = match app.current_view {
+        CalendarView::Year => {
+            view_data.chunks(3).map(|chunk| {
+                Row::new(chunk.iter().map(|(month, is_current)| {
+                    let cell = Cell::from(month.clone());
+                    if *is_current {
+                        cell.style(Style::default().fg(Color::Red).add_modifier(Modifier::BOLD))
+                    } else {
+                        cell.style(Style::default().fg(Color::Green))
+                    }
+                }))
+            }).collect::<Vec<_>>()
+        },
+        CalendarView::Month => {
+            (0..6).map(|i| {
+                Row::new((0..7).map(|j| {
+                    let index = i * 7 + j;
+                    if let Some((day, is_current_month)) = view_data.get(index) {
+                        let cell = Cell::from(day.clone());
+                        if (i, j) == app.table_selected_cell {
+                            cell.style(Style::default().fg(Color::Black).bg(Color::Yellow).add_modifier(Modifier::BOLD))
+                        } else if day == &today_day.to_string() && *is_current_month {
+                            cell.style(Style::default().fg(Color::Red).add_modifier(Modifier::BOLD))
+                        } else if *is_current_month {
+                            cell.style(Style::default().fg(Color::Green))
+                        } else {
+                            cell.style(Style::default().fg(Color::Gray))
+                        }
+                    } else {
+                        Cell::from("  ").style(Style::default().fg(Color::Gray))
+                    }
+                }))
+                .height(row_height as u16)
+            }).collect()
+        },
+        CalendarView::Week => {
+            vec![Row::new(view_data.into_iter().map(|(day, is_current_month)| {
+                let cell = Cell::from(day);
+                if is_current_month {
+                    cell.style(Style::default().fg(Color::Green))
                 } else {
-                    Cell::from(content).style(Style::default().fg(Color::Gray))
-                };
-                cell
-            } else {
-                Cell::from("  ").style(Style::default().fg(Color::Gray))
-            }
-        }).collect::<Vec<_>>())
-        .height(row_height as u16)
-    }).collect::<Vec<_>>();
+                    cell.style(Style::default().fg(Color::Gray))
+                }
+            }))]
+        },
+        CalendarView::Day => {
+            vec![Row::new(vec![Cell::from(view_data[0].0.clone()).style(Style::default().fg(Color::Green))])]
+        },
+    };
 
-    let calendar_table = Table::new(rows, [Constraint::Length(5), Constraint::Length(5)])
+    let calendar_title = match app.current_view {
+        CalendarView::Year => format!("Year View - {}", app.currently_selected_date.format("%Y")),
+        CalendarView::Month => format!("Month View - {}", app.currently_selected_date.format("%B %Y")),
+        CalendarView::Week => format!("Week View - Week of {}", app.currently_selected_date.format("%B %d, %Y")),
+        CalendarView::Day => format!("Day View - {}", app.currently_selected_date.format("%B %d, %Y")),
+    };
+
+    let calendar_table = Table::new(rows, [ Constraint::Length(5), Constraint::Length(5)])
         .block(
             Block::default()
                 .borders(Borders::ALL)
-                .title("Calendar")
+                .title(calendar_title)
                 .title_alignment(Alignment::Center)
                 .style(if app.focused_chunk == 1 {
                     Style::default().fg(Color::Red)
@@ -142,8 +172,10 @@ pub fn render(app: &mut App, frame: &mut Frame) {
 
     let controls = Paragraph::new(format!(
         "h j k l - < v ^ > Movement\n\
-        f - forward / accept\n\
-        d - back / decline\n\
+        f - zoom in\n\
+        d - zoom out\n\
+        o - previous (month/week/year)\n\
+        p - next (month/week/year)\n\
         c - create new assignment\n\
         s - switch panes\n\
         q - quit application"

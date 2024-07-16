@@ -1,16 +1,16 @@
-use time::{OffsetDateTime, PrimitiveDateTime, Duration};
+Make it so you can run it by simply typing "todo" in the terminal,
+similar to how writing "code" just opens up vsc
 
-fn main() {
-    use std::time::SystemTime;
+Maybe also make it so you can add an assignment without opening the app.
+Ex: "todo" -> opens full application
+"todo -c 'meet with boss' 'Meeting' 'finishing up report' '02-05-2024 10:00' '02-05-2024 11:00' 'todo'"
+-> does NOT open the application but creates an assignment with the properties and adds it to the list,
+then prints "assignment added!" so that you can see it next time you open the app
 
-    let timestamp = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
-    
-    let created_at = OffsetDateTime::from_unix_timestamp_nanos(
-        (timestamp.as_secs() as i128 * 1_000_000_000) + (timestamp.subsec_nanos() as i128)
-    ).unwrap();
-    
-    let created_at_edt = created_at - Duration::hours(5);
-    
-    let created_at = PrimitiveDateTime::new(created_at_edt.date(), created_at_edt.time());
-    println!("{:?}", created_at);
-}
+^ But you could make it simpler, for example:
+if you don't include an event type it'll default to assignment
+if you don't include a date itll default to the current day
+if you dont include a KanbanStatus it'll default to todo for assignments and none for meetings
+description is optional
+etc etc. to make it faster to use. (hopefully this would just reuse the error checking from the
+normal create assignment function)

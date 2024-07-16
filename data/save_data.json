@@ -2,10 +2,11 @@
   "assignments": [
     {
       "name": "test one",
+      "event_type": "Assignment",
       "description": "basics of biology",
       "start": [
         2024,
-        1,
+        198,
         10,
         0,
         0,
@@ -13,19 +14,21 @@
       ],
       "end": [
         2024,
-        1,
+        198,
         11,
         0,
         0,
         0
-      ]
+      ],
+      "kanban_status": "Todo"
     },
     {
       "name": "my meeting",
+      "event_type": "Meeting",
       "description": "daily stand up",
       "start": [
         2024,
-        1,
+        198,
         12,
         0,
         0,
@@ -33,19 +36,21 @@
       ],
       "end": [
         2024,
-        1,
+        198,
         13,
         0,
         0,
         0
-      ]
+      ],
+      "kanban_status": "None"
     },
     {
       "name": "homework 3",
+      "event_type": "Assignment",
       "description": "working on code",
       "start": [
         2024,
-        2,
+        199,
         8,
         0,
         0,
@@ -53,19 +58,21 @@
       ],
       "end": [
         2024,
-        1,
+        199,
         9,
         0,
         0,
         0
-      ]
+      ],
+      "kanban_status": "InProgress"
     },
     {
       "name": "my meeting",
+      "event_type": "Meeting",
       "description": "daily stand up",
       "start": [
         2024,
-        2,
+        215,
         9,
         0,
         0,
@@ -73,19 +80,21 @@
       ],
       "end": [
         2024,
-        1,
+        214,
         13,
         0,
         0,
         0
-      ]
+      ],
+      "kanban_status": "Done"
     },
     {
-      "name": "my feb meeting",
+      "name": "project requirements",
+      "event_type": "Assignment",
       "description": "blah blah",
       "start": [
         2024,
-        1,
+        220,
         12,
         0,
         0,
@@ -93,12 +102,13 @@
       ],
       "end": [
         2024,
-        1,
+        220,
         15,
         0,
         0,
         0
-      ]
+      ],
+      "kanban_status": "Backburner"
     }
   ]
 }
